@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  web-sample:
+    env_file:
+      - .env
+    container_name: go-sample-web-server
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+      args:
+        GO_VERSION: ${GO_VERSION}
+    volumes:
+      - .:/go/src/go-sample
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+    depends_on:
+      - mysql-sample
+    restart: on-failure
+
+  mysql-sample:
+    container_name: go-sample-mysql-server
+    image: mysql:5.7
+    volumes:
+      - ./scripts/database:/docker-entrypoint-initdb.d
+    ports:
+      - ${MYSQL_PORT}:3306
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
