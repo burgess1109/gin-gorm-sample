@@ -4,7 +4,7 @@ services:
   web-sample:
     env_file:
       - .env
-    container_name: go-sample-web-server
+    container_name: go-web-server-sample
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
@@ -19,7 +19,7 @@ services:
     restart: on-failure
 
   mysql-sample:
-    container_name: go-sample-mysql-server
+    container_name: go-mysql-server-sample
     image: mysql:5.7
     volumes:
       - ./scripts/database:/docker-entrypoint-initdb.d

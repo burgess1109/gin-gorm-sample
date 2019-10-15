@@ -2,7 +2,7 @@ USE sample;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) NOT NULL,
   `birthday` date,
   `sex` ENUM('boy', 'girl', 'other') NOT NULL ,
@@ -13,8 +13,8 @@ CREATE TABLE `user` (
 
 DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `user_id` INT NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int NOT NULL,
   `context` varchar(255),
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
