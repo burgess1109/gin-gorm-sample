@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
   `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user_id` int NOT NULL,
-  `context` varchar(255),
+  `context` TEXT,
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   INDEX (`id`, `user_id`)
