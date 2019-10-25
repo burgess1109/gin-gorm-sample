@@ -1,4 +1,4 @@
-package messages
+package message
 
 import (
 	"net/http"

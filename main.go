@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/viper"
 
 	"gin-gorm-sample/database"
-	"gin-gorm-sample/messages"
-	"gin-gorm-sample/users"
+	"gin-gorm-sample/message"
+	"gin-gorm-sample/user"
 )
 
 var db *gorm.DB
@@ -21,8 +21,8 @@ var services Services
 var err error
 
 type Services struct {
-	users    users.UserServiceInterface
-	messages messages.MessageServiceInterface
+	user    user.UserServiceInterface
+	message message.MessageServiceInterface
 }
 
 func main() {
@@ -80,26 +80,26 @@ func initDB() {
 }
 
 func initServices() {
-	userRepo := users.NewUserRepository(db)
-	userService := users.NewUserService(userRepo)
+	userRepo := user.NewUserRepository(db)
+	userService := user.NewUserService(userRepo)
 
-	messageRepo := messages.NewMessageRepository(db)
-	messageService := messages.NewMessageService(messageRepo)
+	messageRepo := message.NewMessageRepository(db)
+	messageService := message.NewMessageService(messageRepo)
 
-	services.users = userService
-	services.messages = messageService
+	services.user = userService
+	services.message = messageService
 }
 
 func initRoutes() {
-	routes.GET("users", services.users.Get)
-	routes.GET("users/:id", services.users.GetByID)
-	routes.POST("users", services.users.Create)
-	routes.PATCH("users/:id", services.users.Update)
-	routes.DELETE("users/:id", services.users.Delete)
+	routes.GET("users", services.user.Get)
+	routes.GET("users/:id", services.user.GetByID)
+	routes.POST("users", services.user.Create)
+	routes.PATCH("users/:id", services.user.Update)
+	routes.DELETE("users/:id", services.user.Delete)
 
-	routes.GET("messages", services.messages.Get)
-	routes.GET("messages/:id", services.messages.GetByID)
-	routes.POST("messages", services.messages.Create)
-	routes.PATCH("messages/:id", services.messages.Update)
-	routes.DELETE("messages/:id", services.messages.Delete)
+	routes.GET("messages", services.message.Get)
+	routes.GET("messages/:id", services.message.GetByID)
+	routes.POST("messages", services.message.Create)
+	routes.PATCH("messages/:id", services.message.Update)
+	routes.DELETE("messages/:id", services.message.Delete)
 }
