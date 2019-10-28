@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type MessageService struct {
-	messageRepo MessageRepository
+type Service struct {
+	messageRepo Repository
 }
 
-type MessageServiceInterface interface {
+type ServiceInterface interface {
 	Get(c *gin.Context)
 	GetByID(c *gin.Context)
 	Create(c *gin.Context)
@@ -19,11 +19,11 @@ type MessageServiceInterface interface {
 	Delete(c *gin.Context)
 }
 
-func NewMessageService(messageRepo MessageRepository) *MessageService {
-	return &MessageService{messageRepo: messageRepo}
+func NewService(messageRepo Repository) *Service {
+	return &Service{messageRepo: messageRepo}
 }
 
-func (u *MessageService) Get(c *gin.Context) {
+func (u *Service) Get(c *gin.Context) {
 	userID, err := strconv.Atoi(c.DefaultQuery("user_id", "0"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -45,7 +45,7 @@ func (u *MessageService) Get(c *gin.Context) {
 	})
 }
 
-func (u *MessageService) GetByID(c *gin.Context) {
+func (u *Service) GetByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := u.messageRepo.GetMessageByID(uint(id))
 	if err != nil {
@@ -60,7 +60,7 @@ func (u *MessageService) GetByID(c *gin.Context) {
 	})
 }
 
-func (u *MessageService) Create(c *gin.Context) {
+func (u *Service) Create(c *gin.Context) {
 	var message Message
 
 	if err := c.ShouldBindJSON(&message); err != nil {
@@ -82,7 +82,7 @@ func (u *MessageService) Create(c *gin.Context) {
 	})
 }
 
-func (u *MessageService) Update(c *gin.Context) {
+func (u *Service) Update(c *gin.Context) {
 	var message Message
 
 	if err := c.ShouldBindJSON(&message); err != nil {
@@ -113,7 +113,7 @@ func (u *MessageService) Update(c *gin.Context) {
 	})
 }
 
-func (u *MessageService) Delete(c *gin.Context) {
+func (u *Service) Delete(c *gin.Context) {
 	var message Message
 
 	id, err := strconv.Atoi(c.Param("id"))

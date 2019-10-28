@@ -4,29 +4,29 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type MessageRepository struct {
+type Repository struct {
 	db *gorm.DB
 }
 
-type UserRepositoryInterface interface {
-	GetMessagesByUserID(userID uint) ([]MessageAssociateUser, error)
+type RepositoryInterface interface {
+	GetMessagesByUserID(userID uint) ([]AssociateUser, error)
 	GetMessageByID(messageID uint) (Message, error)
 	CreateMessage(message *Message) error
 	UpdateMessage(message *Message) error
 	DeleteMessage(message *Message) error
 }
 
-type MessageAssociateUser struct {
+type AssociateUser struct {
 	Message
 	UserName string `json:"user_name"`
 }
 
-func NewMessageRepository(db *gorm.DB) MessageRepository {
-	return MessageRepository{db: db}
+func NewRepository(db *gorm.DB) Repository {
+	return Repository{db: db}
 }
 
-func (repository *MessageRepository) GetMessagesByUserID(userID uint) ([]MessageAssociateUser, error) {
-	var messageAssociateUsers []MessageAssociateUser
+func (repository *Repository) GetMessagesByUserID(userID uint) ([]AssociateUser, error) {
+	var messageAssociateUsers []AssociateUser
 
 	sqlDB := repository.db.
 		Select("message.*, user.name as user_name").
@@ -41,8 +41,8 @@ func (repository *MessageRepository) GetMessagesByUserID(userID uint) ([]Message
 	return messageAssociateUsers, err
 }
 
-func (repository *MessageRepository) GetMessageByID(messageID uint) (MessageAssociateUser, error) {
-	var messageAssociateUser MessageAssociateUser
+func (repository *Repository) GetMessageByID(messageID uint) (AssociateUser, error) {
+	var messageAssociateUser AssociateUser
 
 	err := repository.db.
 		Select("message.*, user.name as user_name").
@@ -53,14 +53,14 @@ func (repository *MessageRepository) GetMessageByID(messageID uint) (MessageAsso
 	return messageAssociateUser, err
 }
 
-func (repository *MessageRepository) CreateMessage(message *Message) error {
+func (repository *Repository) CreateMessage(message *Message) error {
 	return repository.db.Create(&message).Error
 }
 
-func (repository *MessageRepository) UpdateMessage(message *Message) error {
+func (repository *Repository) UpdateMessage(message *Message) error {
 	return repository.db.Model(&message).Updates(message).Error
 }
 
-func (repository *MessageRepository) DeleteMessage(message *Message) error {
+func (repository *Repository) DeleteMessage(message *Message) error {
 	return repository.db.Delete(&message).Error
 }

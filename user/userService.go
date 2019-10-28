@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserService struct {
-	userRepo UserRepository
+type Service struct {
+	userRepo Repository
 }
 
-type UserServiceInterface interface {
+type ServiceInterface interface {
 	Get(c *gin.Context)
 	GetByID(c *gin.Context)
 	Create(c *gin.Context)
@@ -19,11 +19,11 @@ type UserServiceInterface interface {
 	Delete(c *gin.Context)
 }
 
-func NewUserService(userRepo UserRepository) *UserService {
-	return &UserService{userRepo: userRepo}
+func NewService(userRepo Repository) *Service {
+	return &Service{userRepo: userRepo}
 }
 
-func (u *UserService) Get(c *gin.Context) {
+func (u *Service) Get(c *gin.Context) {
 	users, err := u.userRepo.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -37,7 +37,7 @@ func (u *UserService) Get(c *gin.Context) {
 	})
 }
 
-func (u *UserService) GetByID(c *gin.Context) {
+func (u *Service) GetByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := u.userRepo.GetUserByID(uint(id))
 	if err != nil {
@@ -52,7 +52,7 @@ func (u *UserService) GetByID(c *gin.Context) {
 	})
 }
 
-func (u *UserService) Create(c *gin.Context) {
+func (u *Service) Create(c *gin.Context) {
 	var user User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -74,7 +74,7 @@ func (u *UserService) Create(c *gin.Context) {
 	})
 }
 
-func (u *UserService) Update(c *gin.Context) {
+func (u *Service) Update(c *gin.Context) {
 	var user User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -105,7 +105,7 @@ func (u *UserService) Update(c *gin.Context) {
 	})
 }
 
-func (u *UserService) Delete(c *gin.Context) {
+func (u *Service) Delete(c *gin.Context) {
 	var user User
 
 	id, err := strconv.Atoi(c.Param("id"))

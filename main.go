@@ -21,8 +21,8 @@ var services Services
 var err error
 
 type Services struct {
-	user    user.UserServiceInterface
-	message message.MessageServiceInterface
+	user    user.ServiceInterface
+	message message.ServiceInterface
 }
 
 func main() {
@@ -80,11 +80,11 @@ func initDB() {
 }
 
 func initServices() {
-	userRepo := user.NewUserRepository(db)
-	userService := user.NewUserService(userRepo)
+	userRepo := user.NewRepository(db)
+	userService := user.NewService(userRepo)
 
-	messageRepo := message.NewMessageRepository(db)
-	messageService := message.NewMessageService(messageRepo)
+	messageRepo := message.NewRepository(db)
+	messageService := message.NewService(messageRepo)
 
 	services.user = userService
 	services.message = messageService

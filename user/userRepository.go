@@ -4,11 +4,11 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type UserRepository struct {
+type Repository struct {
 	db *gorm.DB
 }
 
-type UserRepositoryInterface interface {
+type RepositoryInterface interface {
 	GetAll() ([]User, error)
 	GetUserByID(userID uint) (User, error)
 	CreateUser(user *User) error
@@ -16,30 +16,30 @@ type UserRepositoryInterface interface {
 	DeleteUser(user *User) error
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
-	return UserRepository{db: db}
+func NewRepository(db *gorm.DB) Repository {
+	return Repository{db: db}
 }
 
-func (repository *UserRepository) GetAll() ([]User, error) {
+func (repository *Repository) GetAll() ([]User, error) {
 	var users []User
 	err := repository.db.Find(&users).Error
 	return users, err
 }
 
-func (repository *UserRepository) GetUserByID(userID uint) (User, error) {
+func (repository *Repository) GetUserByID(userID uint) (User, error) {
 	var user User
 	err := repository.db.First(&user, userID).Error
 	return user, err
 }
 
-func (repository *UserRepository) CreateUser(user *User) error {
+func (repository *Repository) CreateUser(user *User) error {
 	return repository.db.Create(&user).Error
 }
 
-func (repository *UserRepository) UpdateUser(user *User) error {
+func (repository *Repository) UpdateUser(user *User) error {
 	return repository.db.Model(&user).Updates(user).Error
 }
 
-func (repository *UserRepository) DeleteUser(user *User) error {
+func (repository *Repository) DeleteUser(user *User) error {
 	return repository.db.Delete(&user).Error
 }
