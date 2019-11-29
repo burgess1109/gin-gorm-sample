@@ -1,105 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
-	"strings"
 
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	"github.com/spf13/viper"
-
-	"gin-gorm-sample/database"
-	"gin-gorm-sample/message"
-	"gin-gorm-sample/user"
+	"gin-gorm-sample/server"
 )
 
-var db *gorm.DB
-var routes *gin.Engine
-var services Services
-var err error
-
-type Services struct {
-	user    user.ServiceInterface
-	message message.ServiceInterface
-}
-
 func main() {
-	initConfig()
+	initiator := server.Init()
+	initiator.InitConfig()
+	initiator.InitDB()
+	initiator.InitService()
+	initiator.InitRouter()
 
-	initDB()
+	db := initiator.GetDB()
 	defer db.Close()
+
+	router := initiator.GetRouter()
 
 	port, exist := os.LookupEnv("WEB_PORT")
 	if !exist {
 		port = "8080"
 	}
 
-	initServices()
-
-	routes = gin.Default()
-	initRoutes()
-
-	routes.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	err = routes.Run(":" + port)
+	err := router.Run(":" + port)
 	if err != nil {
 		log.Fatal("Server run error:" + err.Error())
 	}
-}
-
-func initConfig() {
-	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-
-	viper.AddConfigPath("./configs")
-	viper.SetConfigType("yml")
-	configFile := fmt.Sprintf("config.%s", os.Getenv("ENV"))
-	viper.SetConfigName(configFile)
-
-	err = viper.ReadInConfig()
-	if err != nil {
-		log.Fatal("Config file get error:" + err.Error())
-	}
-}
-
-func initDB() {
-	db, err = database.ConnectMySQL()
-	if err != nil {
-		log.Fatal("DB connect error:" + err.Error())
-	}
-
-	if viper.GetBool("mysql.debug.mode") {
-		db.LogMode(true)
-	}
-}
-
-func initServices() {
-	userRepo := user.NewRepository(db)
-	userService := user.NewService(userRepo)
-
-	messageRepo := message.NewRepository(db)
-	messageService := message.NewService(messageRepo)
-
-	services.user = userService
-	services.message = messageService
-}
-
-func initRoutes() {
-	routes.GET("users", services.user.Get)
-	routes.GET("users/:id", services.user.GetByID)
-	routes.POST("users", services.user.Create)
-	routes.PATCH("users/:id", services.user.Update)
-	routes.DELETE("users/:id", services.user.Delete)
-
-	routes.GET("messages", services.message.Get)
-	routes.GET("messages/:id", services.message.GetByID)
-	routes.POST("messages", services.message.Create)
-	routes.PATCH("messages/:id", services.message.Update)
-	routes.DELETE("messages/:id", services.message.Delete)
 }
