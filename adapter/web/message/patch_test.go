@@ -57,7 +57,7 @@ func TestPatch(t *testing.T) {
 			bytes.NewBufferString("{}"),
 			nil,
 			http.StatusOK,
-			`{"message":"update user success"}`,
+			`{"message":"update user successful"}`,
 		},
 	}
 

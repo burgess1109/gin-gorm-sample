@@ -59,7 +59,7 @@ func TestPost(t *testing.T) {
 			bytes.NewBufferString(`{"context":"TEST", "user_id": 123}`),
 			nil,
 			http.StatusOK,
-			`{"message":"create user success"}`,
+			`{"message":"create user successful"}`,
 		},
 	}
 

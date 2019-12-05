@@ -36,7 +36,7 @@ func (r *Router) patch(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "update user success",
+		"message": "update user successful",
 	})
 }
 

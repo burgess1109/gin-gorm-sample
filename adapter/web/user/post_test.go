@@ -80,7 +80,7 @@ func TestPost(t *testing.T) {
 			bytes.NewBufferString(`{"name":"TEST", "sex": "boy", "email": "abc@gmail.com"}`),
 			nil,
 			http.StatusOK,
-			`{"message":"create user success"}`,
+			`{"message":"create user successful"}`,
 		},
 	}
 

@@ -26,7 +26,7 @@ func (r Router) post(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "create user success",
+		"message": "create user successful",
 	})
 }
 
