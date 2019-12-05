@@ -1,0 +1,384 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Gin-GORM-Sample
+servers:
+  - url: http://localhost:8080
+paths:
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a user
+      tags:
+        - Users
+      requestBody:
+        description: create a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreate"
+      responses:
+        '200':
+          description: create successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{user_id}:
+    get:
+      summary: Get a user
+      tags:
+        - Users
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The id of the user
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: update a user
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          description: The id of the user
+          schema:
+            type: integer
+      requestBody:
+        description: update a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        '200':
+          description: update successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: delete a user
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          description: The id of the user
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: delete successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /messages:
+    get:
+      summary: Get all messages
+      tags:
+        - Messages
+      parameters:
+        - name: user_id
+          in: query
+          description: The id of the user
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array of messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Messages"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a message
+      tags:
+        - Messages
+      requestBody:
+        description: create a message
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageCreate"
+      responses:
+        '200':
+          description: create successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /messages/{message_id}:
+    get:
+      summary: Get a message
+      tags:
+        - Messages
+      parameters:
+        - name: message_id
+          in: path
+          required: true
+          description: The id of the message
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: a message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: update a message
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: message_id
+          required: true
+          description: The id of the message
+          schema:
+            type: integer
+      requestBody:
+        description: update a message
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageUpdate"
+      responses:
+        '200':
+          description: update successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: delete a message
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: message_id
+          required: true
+          description: The id of the message
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: delete successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    User:
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+            - boy
+            - girl
+            - other
+        email:
+          type: string
+        updated_at:
+          type: string
+        created_at:
+          type: string
+    Users:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    UserCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+        email:
+          type: string
+      required:
+        - name
+        - email
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+        email:
+          type: string
+    Message:
+      required:
+        - id
+        - user
+        - context
+      properties:
+        id:
+          type: integer
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        context:
+          type: string
+        updated_at:
+          type: string
+        created_at:
+          type: string
+    Messages:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+    MessageCreate:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        context:
+          type: string
+      required:
+        - user_id
+        - context
+    MessageUpdate:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        context:
+          type: string
+    Error:
+      required:
+        - error
+      properties:
+        error:
+          type: string
