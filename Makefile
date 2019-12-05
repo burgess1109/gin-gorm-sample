@@ -12,3 +12,6 @@ download:
 test:
 	docker-compose exec web-sample golangci-lint run
 	docker-compose exec web-sample go test -v -cover ./...
+
+mod-tidy:
+	docker-compose exec web-sample go mod tidy
