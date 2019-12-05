@@ -8,3 +8,7 @@ download:
 	go get github.com/githubnemo/CompileDaemon@v1.0.0
 	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.18.0
 	go mod tidy
+
+test:
+	docker-compose exec web-sample golangci-lint run
+	docker-compose exec web-sample go test -v -cover ./...
